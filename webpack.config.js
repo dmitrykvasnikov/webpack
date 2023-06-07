@@ -4,17 +4,35 @@ const miniCSSExtractPlugin = require('mini-css-extract-plugin')
 
 const mode = process.env.NODE_ENV || 'development'
 const devMode = mode == 'development'
+const noPostProduction = process.env.NODE_DEV == 'on' ? true : false
 const target = devMode ? 'web' : 'browserslist'
 const devtool = devMode ? 'source-map' : undefined
 
+
 // Making list of html pages plugins. Don't forget to import them in index.js
-const htmlPageNames = ['index', 'html/about', 'html/test']
+const htmlPageNames = ['index']
 const multipleHtmlPlugins = htmlPageNames.map(page => {
   return new htmlWebpackPlugin({
     template: path.resolve(__dirname, 'src', `${page}.html`),
     filename: `${page}.html`
   })
 })
+
+const jsHandler = noPostProduction ?
+  [] :
+  ['babel-loader']
+const cssHandler = noPostProduction ?
+  [
+    devMode ? 'style-loader' : miniCSSExtractPlugin.loader,
+    'css-loader',
+    'sass-loader'
+  ] :
+  [
+    devMode ? 'style-loader' : miniCSSExtractPlugin.loader,
+    'css-loader',
+    'postcss-loader',
+    'sass-loader'
+  ]
 
 module.exports = {
   mode,
@@ -34,17 +52,12 @@ module.exports = {
       },
       {
         test: /\.(c|s[ac])ss$/i,
-        use: [
-          devMode ? 'style-loader' : miniCSSExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader',
-          'sass-loader'
-        ]
+        use: cssHandler
       },
       {
         test: /\.m?js$/i,
         exclude: /node_modules/i,
-        use: devMode ? [] : ['babel-loader']
+        use: jsHandler
       },
       {
         test: /\.woff2?$/i,
