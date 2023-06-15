@@ -108,7 +108,7 @@ module.exports = {
     })
   ].concat(multipleHtmlPlugins),
   devServer: {
-//     host: '192.168.0.19',
+    host: '192.168.0.19',
     port: 3000,
     hot: true,
     open: true
