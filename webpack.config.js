@@ -1,6 +1,7 @@
 const path = require('path')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const miniCSSExtractPlugin = require('mini-css-extract-plugin')
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 
 const mode = process.env.NODE_ENV || 'development'
 const devMode = mode == 'development'
@@ -33,6 +34,49 @@ const cssHandler = noPostProduction ?
     'postcss-loader',
     'sass-loader'
   ]
+const optimization = noPostProduction ? {} :
+  {
+    minimizer: [
+      new ImageMinimizerPlugin({
+        minimizer: {
+          implementation: ImageMinimizerPlugin.imageminMinify,
+          options: {
+            // Lossless optimization with custom option
+            // Feel free to experiment with options for better result for you
+            plugins: [
+              ["gifsicle", { interlaced: true }],
+              ["jpegtran", { progressive: true }],
+              ["optipng", { optimizationLevel: 5 }],
+              // Svgo configuration here https://github.com/svg/svgo#configuration
+              [
+                "svgo",
+                {
+                  plugins: [
+                    {
+                      name: "preset-default",
+                      params: {
+                        overrides: {
+                          removeViewBox: false,
+                          addAttributesToSVGElement: {
+                            params: {
+                              attributes: [
+                                { xmlns: "http://www.w3.org/2000/svg" },
+                              ],
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        }
+      } 
+      )
+    ]
+  }
 
 module.exports = {
   mode,
@@ -42,7 +86,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    filename: 'index.[contenthash].js',
+    filename: 'js/index.[contenthash].js',
   },
   watchOptions: {
     ignored: /node_modules/,
@@ -55,7 +99,7 @@ module.exports = {
       },
       {
         test: /\.(c|s[ac])ss$/i,
-        use: cssHandler
+        use: cssHandler,
       },
       {
         test: /\.m?js$/i,
@@ -103,7 +147,7 @@ module.exports = {
   },
   plugins: [
     new miniCSSExtractPlugin({
-      filename: 'index.[contenthash].css'
+      filename: 'css/index.[contenthash].css'
     })
   ].concat(multipleHtmlPlugins),
   devServer: {
@@ -111,5 +155,6 @@ module.exports = {
     port: 3000,
     hot: true,
     open: true
-  }
+  },
+  optimization
 }
