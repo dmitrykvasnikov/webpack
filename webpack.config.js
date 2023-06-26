@@ -44,6 +44,9 @@ module.exports = {
     clean: true,
     filename: 'index.[contenthash].js',
   },
+  watchOptions: {
+    ignored: /node_modules/,
+  },
   module: {
     rules: [
       {
