@@ -102,16 +102,12 @@ module.exports = {
     ]
   },
   plugins: [
-    new htmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, 'src', 'index.html')
-    }),
     new miniCSSExtractPlugin({
       filename: 'index.[contenthash].css'
     })
   ].concat(multipleHtmlPlugins),
   devServer: {
-    host: '192.168.0.19',
+    host: '192.168.0.11',
     port: 3000,
     hot: true,
     open: true
