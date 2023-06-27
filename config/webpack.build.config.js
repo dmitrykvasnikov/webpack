@@ -1,4 +1,5 @@
 const {merge} = require('webpack-merge')
+const webpack = require('webpack')
 const wepbackBaseConfig = require('./webpack.base.config')
 const miniCSSExtractPlugin = require('mini-css-extract-plugin')
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
@@ -25,7 +26,7 @@ module.exports = merge(wepbackBaseConfig, {
   plugins: [
     new miniCSSExtractPlugin({
       filename: `${wepbackBaseConfig.externals.path.assets}css/[name].css`
-    })
+    }), 
   ],
   optimization: {
     minimizer: [
@@ -33,7 +34,7 @@ module.exports = merge(wepbackBaseConfig, {
         minimizer: {
           implementation: ImageMinimizerPlugin.imageminMinify,
           options: {
-            // Lossless optimization with custom option
+            // Lossless - jpegtran && optipng
             // Lossy - mozjpeg && pngquant
             // Feel free to experiment with options for better result for you
             plugins: [

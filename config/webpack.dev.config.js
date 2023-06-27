@@ -1,10 +1,10 @@
-const path = require('path')
+const webpack = require('webpack')
 const {merge} = require('webpack-merge')
 const webpackBaseConfig = require('./webpack.base.config')
 
 module.exports = merge(webpackBaseConfig, {
   mode: 'development',
-  devtool: 'source-map',
+  devtool: 'eval-cheap-module-source-map',
   target: 'web',
   module: {
     rules: [
@@ -21,8 +21,10 @@ module.exports = merge(webpackBaseConfig, {
     port: 3000,
     hot: true,
     open: true,
-    // static: {
-    //   directory: path.join(__dirname, webpackBaseConfig.externals.path.build),
-    // }
   },
+  plugins: [
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[file].map',
+    })
+  ]
 })

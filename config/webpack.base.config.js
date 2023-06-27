@@ -1,19 +1,17 @@
 const path = require('path')
 const htmlWebpackPlugin = require('html-webpack-plugin')
-
 // Paths for webpack
 const PATH = {
-  src: '../src',
-  build: '../dist',
+  src: 'src',
+  build: 'dist',
   assets: 'assets/'
 }
-
 
 // List of html pages in project. Don't forget to import them in index.js
 const htmlPageNames = ['index']
 const multipleHtmlPlugins = htmlPageNames.map(page => {
   return new htmlWebpackPlugin({
-    template: path.join(__dirname, PATH.src, `${page}.html`),
+    template: path.resolve(PATH.src, `${page}.html`),
     filename: `${page}.html`
   })
 })
@@ -23,10 +21,10 @@ module.exports = {
     path: PATH
   },
   entry: {
-    index: path.resolve(__dirname, PATH.src, 'index.js')
+    index: path.resolve(PATH.src, 'index.js')
   },
   output: {
-    path: path.resolve(__dirname, PATH.build),
+    path: path.resolve(PATH.build),
     filename: path.join('js', '[name].js'),
     clean: true
   },
