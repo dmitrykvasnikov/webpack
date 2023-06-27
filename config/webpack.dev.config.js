@@ -1,3 +1,4 @@
+const path = require('path')
 const webpack = require('webpack')
 const {merge} = require('webpack-merge')
 const webpackBaseConfig = require('./webpack.base.config')
@@ -21,6 +22,9 @@ module.exports = merge(webpackBaseConfig, {
     port: 3000,
     hot: true,
     open: true,
+    watchFiles: {
+      paths: [`${path.resolve(webpackBaseConfig.externals.path.src)}/**/*.html`]
+    }
   },
   plugins: [
     new webpack.SourceMapDevToolPlugin({

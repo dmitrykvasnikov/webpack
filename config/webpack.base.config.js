@@ -7,8 +7,8 @@ const PATH = {
   assets: 'assets/'
 }
 
-// List of html pages in project. Don't forget to import them in index.js
-const htmlPageNames = ['index']
+// List of html pages in project without extention (html by default)
+const htmlPageNames = ['index', 'pages/about']
 const multipleHtmlPlugins = htmlPageNames.map(page => {
   return new htmlWebpackPlugin({
     template: path.resolve(PATH.src, `${page}.html`),
@@ -33,10 +33,6 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.html$/i,
-        use: ['html-loader']
-      },
       {
         test: /\.woff2?$/i,
         type: 'asset/resource',
