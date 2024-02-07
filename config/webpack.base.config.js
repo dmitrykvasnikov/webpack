@@ -8,7 +8,7 @@ const PATH = {
 }
 
 // List of html pages in project without extention (html by default)
-const htmlPageNames = ['index', 'pages/about']
+const htmlPageNames = ['index']
 const multipleHtmlPlugins = htmlPageNames.map(page => {
   return new htmlWebpackPlugin({
     template: path.resolve(PATH.src, `${page}.html`),
